@@ -9,10 +9,8 @@ export const hedgehogSchema = z.object({
   name: z.string(),
   age: z.number(),
   sex: z.enum(["male", "female"]),
-  location: z.object({
-    latitude: z.number(),
-    longitude: z.number(),
-  })
+  lat: z.number(),
+  lon: z.number()
 });
 
 export type Hedgehog = z.infer<typeof hedgehogSchema>;

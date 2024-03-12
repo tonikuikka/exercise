@@ -1,9 +1,11 @@
 import { Paper, Typography, Box, TextField, FormControl, FormLabel,
    RadioGroup, FormControlLabel, Radio, Button } from "@mui/material";
 import { useState } from "react";
+import { Hedgehog } from "@shared/hedgehog";
 
 interface Props {
   coordinates: number[];
+  setHedgehogs: any
 }
 
 interface Inputs {
@@ -12,7 +14,7 @@ interface Inputs {
   gender: string;
 }
 
-export function HedgehogForm({ coordinates }: Props) {
+export function HedgehogForm({ coordinates, setHedgehogs }: Props) {
   const [inputs, setInputs] = useState({
     name: "",
     age: 0,
@@ -24,10 +26,23 @@ export function HedgehogForm({ coordinates }: Props) {
     const value = (event.target as HTMLInputElement).value;
     setInputs((values: Inputs) => ({...values, [name]: name === 'age' ? Number(value) : value}))
   }
-
+ 
   const onSubmit = (event: Event) => {
     event.preventDefault();
-    console.log({...inputs, location: coordinates});
+    fetch("/api/v1/hedgehog", {
+      method: 'POST',
+      body: JSON.stringify({...inputs, lat: coordinates[0], lon: coordinates[1]}),
+      headers: { 'Content-Type': 'application/json' },
+    }).then(r => {
+      if (!r.ok) throw r;
+      return r.json();
+    })
+    .then(data => {
+      setHedgehogs((hedgehogs: Hedgehog[]) => [...hedgehogs, data]);
+    })
+    .catch(err => {
+      console.error('Error while saving a hedgehog:', err);
+    });
   }
 
   return (

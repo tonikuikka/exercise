@@ -1,10 +1,7 @@
 import { Box, MenuItem, Paper, Typography } from "@mui/material";
-import { Hedgehog } from "@shared/hedgehog";
 import { useEffect, useState } from "react";
 
-export default function HedgeHogList() {
-  const [hedgehogs, setHedgehogs] = useState<Hedgehog[]>([]);
-
+export default function HedgeHogList({ hedgehogs }) {
   // Fetch all hedgehog's during startup
   useEffect(() => {
     const getAllHedgehogs = async () => {
@@ -13,7 +10,6 @@ export default function HedgeHogList() {
         if (!res.ok) return;
 
         const json = await res.json();
-        setHedgehogs(json?.hedgehogs || []);
       } catch (err) {
         console.error(`Error while fetching hedgehogs: ${err}`);
       }
