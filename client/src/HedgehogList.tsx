@@ -5,7 +5,7 @@ import { Hedgehog } from "@shared/hedgehog";
 interface Props {
   hedgehogs: Hedgehog[];
   selectedHedgehogId: number | null;
-  setSelectedHedgehogId: any;
+  setSelectedHedgehogId: Function;
 }
 
 export default function HedgeHogList({ hedgehogs, selectedHedgehogId, setSelectedHedgehogId }: Props) {
