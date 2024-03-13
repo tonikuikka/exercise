@@ -5,7 +5,7 @@ import { Hedgehog } from "@shared/hedgehog";
 
 interface Props {
   coordinates: number[];
-  setHedgehogs: any
+  setHedgehogs: Function
 }
 
 interface Inputs {
@@ -21,13 +21,13 @@ export function HedgehogForm({ coordinates, setHedgehogs }: Props) {
     gender: "male"
   });
 
-  const handleChange = (event: Event) => {
-    const name = (event.target as HTMLInputElement).name;
-    const value = (event.target as HTMLInputElement).value;
+  const handleChange = (target: HTMLInputElement) => {
+    const name = target.name;
+    const value = target.value;
     setInputs((values: Inputs) => ({...values, [name]: name === 'age' ? Number(value) : value}))
   }
  
-  const onSubmit = (event: Event) => {
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     fetch("/api/v1/hedgehog", {
       method: 'POST',
@@ -69,7 +69,7 @@ export function HedgehogForm({ coordinates, setHedgehogs }: Props) {
           Rekisteröi uusi siili
         </Typography>
       </Box>
-      <form onSubmit={onSubmit} style={{padding: "1em"}}>
+      <form onSubmit={(e) => onSubmit(e)} style={{padding: "1em"}}>
         <TextField
           fullWidth
           required
@@ -79,7 +79,9 @@ export function HedgehogForm({ coordinates, setHedgehogs }: Props) {
           size="small"
           margin="normal"
           value={inputs.name} 
-          onChange={handleChange}
+          onChange={(e) =>
+            handleChange(e.target as HTMLInputElement)
+          }
         />
         <TextField
           fullWidth
@@ -95,7 +97,9 @@ export function HedgehogForm({ coordinates, setHedgehogs }: Props) {
           size="small"
           margin="normal"
           value={inputs.age} 
-          onChange={handleChange}
+          onChange={(e) =>
+            handleChange(e.target as HTMLInputElement)
+          }
         />
         <FormControl
           fullWidth={true}
@@ -110,7 +114,9 @@ export function HedgehogForm({ coordinates, setHedgehogs }: Props) {
             aria-labelledby="hedgehog-gender"
             value={inputs.gender}
             name="gender"
-            onChange={handleChange}
+            onChange={(e) =>
+              handleChange(e.target as HTMLInputElement)
+            }
           >
             <FormControlLabel id="hedgehog-male" value="male" control={<Radio size="small"/>} label="Uros" />
             <FormControlLabel id="hedgehog-female" value="female" control={<Radio size="small"/>} label="Naaras" />
@@ -129,7 +135,9 @@ export function HedgehogForm({ coordinates, setHedgehogs }: Props) {
           }}
           size="small"
           margin="dense"
-          onChange={handleChange}
+          onChange={(e) =>
+            handleChange(e.target as HTMLInputElement)
+          }
         />
 
         <Button
