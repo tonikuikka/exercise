@@ -16,13 +16,22 @@ export async function getAllHedgehogs() {
   }
 }
 
-// TODO: Yksittäisen siilin hakeminen tietokannasta ID:llä
+export async function getHedgehog(id: number) {
+  try {
+    const hedgehog = await getPool().any(
+      sql.type(hedgehogSchema)`SELECT name, age, gender, lat, lon FROM hedgehog WHERE id = ${id} LIMIT 1`
+    );
+    return hedgehog[0];
+  } catch (error) {
+    logger.error(error);
+  }
+}
 
 export async function insertHedgehog(hedgehog: any) {
   try {
     const id = await getPool().any(
       sql.type(z.number())`INSERT INTO hedgehog (name, age, gender, lat, lon) VALUES
-      (${hedgehog?.name || null}, ${hedgehog?.age || null}, ${hedgehog?.sex || null}, ${hedgehog?.lat || null}, ${hedgehog?.lon || null})
+      (${hedgehog?.name ?? null}, ${hedgehog?.age ?? null}, ${hedgehog?.gender ?? null}, ${hedgehog?.lat ?? null}, ${hedgehog?.lon ?? null})
       RETURNING id`
     );
     return id[0];

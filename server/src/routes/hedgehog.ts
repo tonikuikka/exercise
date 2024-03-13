@@ -1,6 +1,5 @@
-import { getAllHedgehogs, insertHedgehog } from "@server/application/hedgehog";
+import { getAllHedgehogs, getHedgehog, insertHedgehog } from "@server/application/hedgehog";
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
-import { logger } from "@server/logging";
 
 export function hedgehogRouter(
   fastify: FastifyInstance,
@@ -15,8 +14,10 @@ export function hedgehogRouter(
     });
   });
 
-  // TODO: Yksittäisen siilin hakeminen tietokannasta ID:llä
-  // fastify.get(...);
+  fastify.get("/:id", async function (_request, reply) {
+    const hedgehog = await getHedgehog((_request.params as any).id);
+    return reply.code(200).send({hedgehog});
+  });
 
   fastify.post("/", async function(_request, reply) {
     const inserted = await insertHedgehog(_request.body);

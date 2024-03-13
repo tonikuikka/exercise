@@ -10,10 +10,9 @@ export function App() {
   // Latest coordinates from the Map click event
   const [coordinates, setCoordinates] = useState<number[]>();
   // ID of the currently selected hedgehog
-  const [selectedHedgehogId, setSelectedHedgehogId] = useState<number | null>(
-    null
-  );
+  const [selectedHedgehogId, setSelectedHedgehogId] = useState<number | null>(null);
   const [hedgehogs, setHedgehogs] = useState<Hedgehog[]>([]);
+  const [mapFeatures, setMapFeatures] = useState<GeoJSON.Feature[]>([]);
 
   return (
     <Box
@@ -49,29 +48,17 @@ export function App() {
           overflow: "hidden",
         }}
       >
-        <HedgeHogList hedgehogs={hedgehogs}/>
+        <HedgeHogList hedgehogs={hedgehogs} selectedHedgehogId={selectedHedgehogId}
+        setSelectedHedgehogId={setSelectedHedgehogId}/>
         <Box>
-          <HedgehogInfo hedgehogId={selectedHedgehogId} />
+          <HedgehogInfo hedgehogId={selectedHedgehogId} setMapFeatures={setMapFeatures}/>
           <HedgehogForm coordinates={coordinates || []} setHedgehogs={setHedgehogs}/>
         </Box>
         <Paper elevation={3} sx={{ margin: "1em" }}>
           <Map
             onMapClick={(coordinates) => setCoordinates(coordinates)}
             // Esimerkki siitä, miten kartalle voidaan välittää siilien koordinaatteja GeoJSON -arrayssä
-            features={[
-              {
-                type: "Feature",
-                geometry: {
-                  type: "Point",
-                  coordinates: [2859167.020281517, 9632038.56757201],
-                },
-                properties: {
-                  name: "Siili Silvennoinen",
-                  age: 50,
-                  gender: "male",
-                },
-              },
-            ]}
+            features={mapFeatures}
           />
         </Paper>
       </Box>

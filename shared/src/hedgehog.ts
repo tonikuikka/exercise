@@ -8,7 +8,7 @@ export const hedgehogSchema = z.object({
   id: z.number(),
   name: z.string(),
   age: z.number(),
-  sex: z.enum(["male", "female"]),
+  gender: z.enum(["male", "female"]),
   lat: z.number(),
   lon: z.number()
 });

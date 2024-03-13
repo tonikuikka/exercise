@@ -39,6 +39,8 @@ export function HedgehogForm({ coordinates, setHedgehogs }: Props) {
     })
     .then(data => {
       setHedgehogs((hedgehogs: Hedgehog[]) => [...hedgehogs, data]);
+      setInputs({ name: "", age: 0, gender: "male" });
+      coordinates.length = 0;
     })
     .catch(err => {
       console.error('Error while saving a hedgehog:', err);
